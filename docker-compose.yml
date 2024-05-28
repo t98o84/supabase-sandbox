@@ -1,0 +1,24 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/node/Dockerfile
+    #    network_mode: host
+    env_file:
+      - .env
+    working_dir: /app
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/app
+    command: npm run dev
+
+  supabase:
+    image: node:22-slim
+    working_dir: $PROJECT_ROOT
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ".:$PROJECT_ROOT"
+    command: npx supabase start
